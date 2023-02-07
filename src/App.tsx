@@ -3,6 +3,7 @@ import './App.css';
 import {v1} from "uuid";
 import todoList, {TaskType} from "./TodoList";
 import TodoList from "./TodoList";
+import AddItemForm from "./AddItemForm";
 
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
@@ -44,6 +45,25 @@ function App() {
         const updatedTodoLists = todoLists.map((tl) => tl.id === todoListId ? {...tl, filter: filter} : tl)
         setTodoLists(updatedTodoLists)
     }
+    const removeTodoList = (todoListId: string) =>{
+        setTodoLists(todoLists.filter(tl=> tl.id !== todoListId))
+        const copyTasks = {...tasks}
+        delete copyTasks[todoListId]
+        setTasks(copyTasks)
+    }
+
+
+    const addTodoList = (title:string) => {
+        const newTodoListId = v1()
+        const newTodo: TodoListType = {
+            id: newTodoListId,
+            title: title,
+            filter: "all"
+        }
+        setTodoLists([...todoLists, newTodo])
+        setTasks({...tasks,[newTodoListId]:[]})
+    }
+
     const removeTask = (taskId: string, todoListId: string) => {
         const updatedTasks = tasks[todoListId].filter(task => task.id !== taskId)
         setTasks({...tasks,[todoListId]: updatedTasks})
@@ -63,12 +83,7 @@ function App() {
         //const updateTasks =
         setTasks({...tasks, [todoListId]: tasks[todoListId].map((t) => t.id === taskId ? {...t, isDone: !t.isDone} : t)})
     }
-    const removeTodoList = (todoListId: string) =>{
-        setTodoLists(todoLists.filter(tl=> tl.id !== todoListId))
-        const copyTasks = {...tasks}
-        delete copyTasks[todoListId]
-        setTasks(copyTasks)
-    }
+
 
     //utility:
     const getFilteredTasksForRender = (tasks: Array<TaskType>, filter: FilterValuesType): Array<TaskType> => {
@@ -105,6 +120,7 @@ function App() {
     {
         return (
             <div className="App">
+                <AddItemForm addItem={addTodoList}/>
                 {todoListComponents}
             </div>
         );

@@ -1,5 +1,6 @@
 import React, {KeyboardEvent, ChangeEvent, useState} from 'react';
 import {FilterValuesType} from "./App";
+import AddItemForm from "./AddItemForm";
 
 
 export type TodoListPropsType = {
@@ -21,12 +22,10 @@ export type TaskType = {
 }
 
 
-const TodoList = (props: TodoListPropsType) => {
-    const [title, setTitle] = useState<string>('')
-    const [error, setError] = useState<boolean>(false)
+const TodoList:React.FC<TodoListPropsType>= (props) => {
 
     let tasksList = props.tasks.length
-    ? props.tasks.map((task) => {
+        ? props.tasks.map((task) => {
             const removeTask = () => props.removeTask(task.id, props.todoListId)
             const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => props.changeTaskStatus(task.id, e.currentTarget.checked, props.todoListId)
             const taskClasses = task.isDone ? 'task-done' : 'task'
@@ -44,26 +43,15 @@ const TodoList = (props: TodoListPropsType) => {
         : <span>Your tasks list is empty</span>
 
 
-    const addTask = () => {
-        const trimmedTitle = title.trim()
-        if (trimmedTitle !== "") {
-            props.addTask(title, props.todoListId)
-        } else {
-            setError(true)
-        }
-        setTitle('')
+
+    const addTask = (title: string) => {
+        props.addTask(title,props.todoListId )
     }
 
 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
-    const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && addTask()
-    const removeTodoList = () => {props.removeTodoList(props.todoListId)
+    const removeTodoList = () => {props.removeTodoList(props.todoListId)}
+    const handlerCreator = (filter: FilterValuesType) => () => props.changeTodoListFilter(filter, props.todoListId)
 
-
-        const handlerCreator = (filter: FilterValuesType) => () => props.changeTodoListFilter(filter, props.todoListId)
-
-        const errorMessage = error && <p style={{color: 'red', fontWeight: 'bold', margin: '0'}}> Title is required</p>
-        const inputErrorClass = error ? 'input-error' : ''
 
 
         return (
@@ -71,17 +59,7 @@ const TodoList = (props: TodoListPropsType) => {
                 <h3>{props.title}
                     <button onClick={removeTodoList}>x</button>
                 </h3>
-                <div>
-                    <input
-                        type='text'
-                        value={title}
-                        onChange={onChangeHandler}
-                        onKeyDown={onKeyDownHandler}
-                        className={inputErrorClass}/>
-
-                    <button onClick={addTask}>+</button>
-                    {errorMessage}
-                </div>
+                <AddItemForm addItem={addTask}/>
                 <ul>
                     {tasksList}
                 </ul>
@@ -100,6 +78,6 @@ const TodoList = (props: TodoListPropsType) => {
                     </button>
                 </div>
             </div>
-        )}
+        )
 }
 export default TodoList;
