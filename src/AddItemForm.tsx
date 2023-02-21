@@ -1,4 +1,7 @@
 import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
+import {IconButton, TextField} from "@mui/material";
+import PlaylistAddRoundedIcon from '@mui/icons-material/PlaylistAddRounded';
+
 
 
 type AddItemFormPropsType = {
@@ -8,8 +11,8 @@ type AddItemFormPropsType = {
 const AddItemForm:FC<AddItemFormPropsType> = (props) => {
     const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<boolean>(false)
-    const errorMessage = error && <p style={{color: 'red', fontWeight: 'bold', margin: '0'}}> Title is required</p>
-    const inputErrorClass = error ? 'input-error' : ''
+    /*const errorMessage = error && <p style={{color: 'red', fontWeight: 'bold', margin: '0'}}> Title is required</p>*/
+    /*const inputErrorClass = error ? 'input-error' : '' */
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         error && setError(false)
@@ -31,14 +34,19 @@ const AddItemForm:FC<AddItemFormPropsType> = (props) => {
     return (
         <div>
             <div className={'addItemForm'}>
-                <input
-                    type='text'
-                    value={title}
-                    onChange={onChangeHandler}
-                    onKeyDown={onKeyDownHandler}
-                    className={inputErrorClass}/>
-                <button onClick={addItem}>+</button>
-                {errorMessage}
+                <TextField
+                type={'text'}
+                value={title}
+                onChange={onChangeHandler}
+                onKeyDown={onKeyDownHandler}
+                variant={'outlined'}
+                size={'small'}
+                label={'enter your title'}
+                error={error}
+                helperText={error && "Title is required"}/>
+                <IconButton>
+                    <PlaylistAddRoundedIcon onClick ={addItem}/>
+                </IconButton>
             </div>
         </div>
     );

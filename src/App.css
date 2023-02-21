@@ -1,3 +1,4 @@
+/*
 .App {
     padding: 30px;
     display: flex;
@@ -6,6 +7,7 @@
 .App > div {
     margin-right: 50px;
 }
+*/
 
 
 .task-done {
@@ -16,6 +18,8 @@
 
 .task {
     font-weight: bold;
+    display: inline-block;
+
 }
 
 .btn-active {
@@ -27,16 +31,31 @@
 }
 
 
-
 .input-error {
     border: 3px solid red;
-    outline:none
+    outline: none
 
 }
 
 .addItemForm {
+    display: flex;
+    flex-direction: row;
+
     border: 2px solid hotpink;
-    border-radius:3px;
+    border-radius: 3px;
     padding: 10px;
     height: fit-content;
 }
+
+.tasks-list-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.tasks-list {
+    padding: 0px;
+
+}
+
+
